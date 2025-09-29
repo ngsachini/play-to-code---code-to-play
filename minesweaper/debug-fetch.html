@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Fetch Test</title>
+</head>
+<body>
+    <h1>Debug Fetch Test</h1>
+    <button onclick="debugFetch()">Debug Fetch</button>
+    <div id="output"></div>
+    
+    <script>
+        async function debugFetch() {
+            const output = document.getElementById('output');
+            output.innerHTML = '<p>Testing fetch requests...</p>';
+            
+            const files = [
+                { name: 'index.html', path: './index.html' },
+                { name: 'style.css', path: './style.css' },
+                { name: 'script.js', path: './script.js' }
+            ];
+            
+            for (const file of files) {
+                try {
+                    output.innerHTML += `<p>Testing ${file.name} at ${file.path}...</p>`;
+                    console.log(`Fetching ${file.path}...`);
+                    
+                    const response = await fetch(file.path);
+                    console.log(`Response for ${file.name}:`, response.status, response.statusText);
+                    output.innerHTML += `<p>Response: ${response.status} ${response.statusText}</p>`;
+                    
+                    if (response.ok) {
+                        const content = await response.text();
+                        console.log(`Content length for ${file.name}:`, content.length);
+                        output.innerHTML += `<p style="color: green;">✓ ${file.name} loaded successfully (${content.length} characters)</p>`;
+                        console.log(`First 100 characters of ${file.name}:`, content.substring(0, 100));
+                    } else {
+                        output.innerHTML += `<p style="color: red;">✗ Failed to load ${file.name}: ${response.status} ${response.statusText}</p>`;
+                    }
+                } catch (error) {
+                    console.error(`Error loading ${file.name}:`, error);
+                    output.innerHTML += `<p style="color: red;">✗ Error loading ${file.name}: ${error.message}</p>`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

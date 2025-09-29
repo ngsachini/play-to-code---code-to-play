@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Load Test</title>
+</head>
+<body>
+    <h1>Game Load Test</h1>
+    <button onclick="loadGame()">Load Game</button>
+    <div id="output"></div>
+    
+    <script>
+        async function loadGame() {
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+            
+            try {
+                output.innerHTML += '<p>Loading index.html...</p>';
+                const htmlResponse = await fetch('games/minesweeper/index.html');
+                const htmlContent = await htmlResponse.text();
+                output.innerHTML += `<p>index.html loaded (${htmlContent.length} characters)</p>`;
+                
+                output.innerHTML += '<p>Loading style.css...</p>';
+                const cssResponse = await fetch('games/minesweeper/style.css');
+                const cssContent = await cssResponse.text();
+                output.innerHTML += `<p>style.css loaded (${cssContent.length} characters)</p>`;
+                
+                output.innerHTML += '<p>Loading script.js...</p>';
+                const jsResponse = await fetch('games/minesweeper/script.js');
+                const jsContent = await jsResponse.text();
+                output.innerHTML += `<p>script.js loaded (${jsContent.length} characters)</p>`;
+                
+                output.innerHTML += '<h2>All files loaded successfully!</h2>';
+                
+                // Try to display the game in an iframe
+                output.innerHTML += '<h3>Game Preview:</h3>';
+                const iframe = document.createElement('iframe');
+                iframe.style.width = '100%';
+                iframe.style.height = '500px';
+                document.body.appendChild(iframe);
+                
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                doc.open();
+                doc.write(htmlContent);
+                doc.close();
+            } catch (error) {
+                output.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error('Load error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

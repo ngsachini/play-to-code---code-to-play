@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Injection Test</title>
+</head>
+<body>
+    <h1>HTML Injection Test</h1>
+    <button onclick="testInjection()">Test Injection</button>
+    <iframe id="preview" style="width: 100%; height: 300px;"></iframe>
+    
+    <script>
+        function testInjection() {
+            const iframe = document.getElementById('preview');
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Injected Content</h1>
+    <p>This content was injected into the iframe.</p>
+    <script>
+        console.log('Script executed in iframe');
+        // Try to send a message to parent
+        window.parent.postMessage({type: 'test', message: 'Hello from iframe'}, '*');
+    <\/script>
+</body>
+</html>`;
+            
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(html);
+            doc.close();
+        }
+        
+        // Listen for messages from iframe
+        window.addEventListener('message', function(event) {
+            console.log('Received message from iframe:', event.data);
+            alert('Received message from iframe: ' + JSON.stringify(event.data));
+        });
+    </script>
+</body>
+</html>

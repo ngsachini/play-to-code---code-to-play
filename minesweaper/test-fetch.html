@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Test</title>
+</head>
+<body>
+    <h1>Fetch Test</h1>
+    <button onclick="testFetch()">Test Fetch</button>
+    <div id="output"></div>
+    
+    <script>
+        async function testFetch() {
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+            
+            try {
+                output.innerHTML += '<p>Testing fetch of ./index.html...</p>';
+                const htmlResponse = await fetch('./index.html');
+                if (!htmlResponse.ok) {
+                    throw new Error(`Failed to load index.html: ${htmlResponse.status} ${htmlResponse.statusText}`);
+                }
+                const htmlText = await htmlResponse.text();
+                output.innerHTML += '<p>Success! Loaded index.html (' + htmlText.length + ' characters)</p>';
+                
+                output.innerHTML += '<p>Testing fetch of ./style.css...</p>';
+                const cssResponse = await fetch('./style.css');
+                if (!cssResponse.ok) {
+                    throw new Error(`Failed to load style.css: ${cssResponse.status} ${cssResponse.statusText}`);
+                }
+                const cssText = await cssResponse.text();
+                output.innerHTML += '<p>Success! Loaded style.css (' + cssText.length + ' characters)</p>';
+                
+                output.innerHTML += '<p>Testing fetch of ./script.js...</p>';
+                const jsResponse = await fetch('./script.js');
+                if (!jsResponse.ok) {
+                    throw new Error(`Failed to load script.js: ${jsResponse.status} ${jsResponse.statusText}`);
+                }
+                const jsText = await jsResponse.text();
+                output.innerHTML += '<p>Success! Loaded script.js (' + jsText.length + ' characters)</p>';
+                
+                output.innerHTML += '<h2>All files loaded successfully!</h2>';
+            } catch (error) {
+                output.innerHTML += '<p style="color: red;">Error: ' + error.message + '</p>';
+                console.error('Fetch error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

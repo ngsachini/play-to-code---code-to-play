@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit & Play Test</title>
+</head>
+<body>
+    <h1>Edit & Play Test</h1>
+    <p>This page tests if the Edit & Play feature is working correctly.</p>
+    
+    <h2>Test Links:</h2>
+    <ul>
+        <li><a href="games/minesweeper/play-and-edit.html" target="_blank">Play & Edit Interface</a></li>
+        <li><a href="games/minesweeper/index.html" target="_blank">Original Game</a></li>
+    </ul>
+    
+    <h2>Debug Information:</h2>
+    <div id="debug-info"></div>
+    
+    <script>
+        async function testFiles() {
+            const info = document.getElementById('debug-info');
+            info.innerHTML = '<p>Testing file access...</p>';
+            
+            try {
+                // Test if we can access the game files
+                const files = [
+                    'games/minesweeper/index.html',
+                    'games/minesweeper/style.css',
+                    'games/minesweeper/script.js',
+                    'games/minesweeper/play-and-edit.html'
+                ];
+                
+                for (const file of files) {
+                    try {
+                        const response = await fetch(file);
+                        if (response.ok) {
+                            info.innerHTML += `<p style="color: green;">✓ ${file} - OK (${response.status})</p>`;
+                        } else {
+                            info.innerHTML += `<p style="color: red;">✗ ${file} - Error (${response.status})</p>`;
+                        }
+                    } catch (error) {
+                        info.innerHTML += `<p style="color: red;">✗ ${file} - Network Error: ${error.message}</p>`;
+                    }
+                }
+            } catch (error) {
+                info.innerHTML += `<p style="color: red;">Test failed: ${error.message}</p>`;
+            }
+        }
+        
+        // Run the test when the page loads
+        window.addEventListener('DOMContentLoaded', testFiles);
+    </script>
+</body>
+</html>

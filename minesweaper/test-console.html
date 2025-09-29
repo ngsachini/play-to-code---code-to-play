@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console Test</title>
+</head>
+<body>
+    <h1>Console Test</h1>
+    <button onclick="testConsole()">Test Console Output</button>
+    <button onclick="testError()">Test Error Output</button>
+    
+    <script>
+        function testConsole() {
+            console.log("This is a log message");
+            console.warn("This is a warning message");
+            console.error("This is an error message");
+        }
+        
+        function testError() {
+            throw new Error("This is a test error");
+        }
+    </script>
+</body>
+</html>

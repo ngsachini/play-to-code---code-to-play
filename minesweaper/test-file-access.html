@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Access Test</title>
+</head>
+<body>
+    <h1>File Access Test</h1>
+    <button onclick="testFileAccess()">Test File Access</button>
+    <div id="output"></div>
+    
+    <script>
+        async function testFileAccess() {
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+            
+            const files = [
+                { name: 'index.html', path: './index.html' },
+                { name: 'style.css', path: './style.css' },
+                { name: 'script.js', path: './script.js' }
+            ];
+            
+            for (const file of files) {
+                try {
+                    output.innerHTML += `<p>Testing ${file.name}...</p>`;
+                    const response = await fetch(file.path);
+                    if (response.ok) {
+                        const content = await response.text();
+                        output.innerHTML += `<p style="color: green;">✓ ${file.name} loaded successfully (${content.length} characters)</p>`;
+                    } else {
+                        output.innerHTML += `<p style="color: red;">✗ Failed to load ${file.name}: ${response.status} ${response.statusText}</p>`;
+                    }
+                } catch (error) {
+                    output.innerHTML += `<p style="color: red;">✗ Error loading ${file.name}: ${error.message}</p>`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
